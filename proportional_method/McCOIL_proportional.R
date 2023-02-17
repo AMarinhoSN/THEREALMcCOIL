@@ -1,8 +1,8 @@
-McCOIL_proportional = function(dataA1, dataA2, maxCOI=25, totalrun=10000, burnin=1000, M0=15, epsilon=0.02, err_method=1, path=getwd(), output="output.txt" ){
+McCOIL_proportional = function(dataA1, dataA2, maxCOI=25, totalrun=10000, burnin=1000, M0=15, epsilon=0.02, err_method=1, path=getwd(), output="output.txt", src_path=""){
 	
-	mcCoil_prop_code_location = '/McCOIL_prop_code.so'
+	mcCoil_prop_code_location = paste(src_path,'/McCOIL_prop_code.so',sep="")
 	if(Sys.info()['sysname'] == 'Windows'){
-		mcCoil_prop_code_location = '/McCOIL_prop_code.dll'
+		mcCoil_prop_code_location = paste(src_path,'/McCOIL_prop_code.dll',sep="")
 	}
 
 	grid = read.table(paste(path, "/fitted_beta_grid_25.txt", sep=""), head=T)
@@ -14,9 +14,9 @@ McCOIL_proportional = function(dataA1, dataA2, maxCOI=25, totalrun=10000, burnin
 	A2=as.vector(t(dataA2))
 
 	if ((n>10 & k>10)){	
-		dyn.load(paste(path, mcCoil_prop_code_location, sep=""))
+		dyn.load(mcCoil_prop_code_location)
 		Kc <- .C("McCOIL_prop", as.integer(maxCOI), as.integer(totalrun), as.integer(n), as.integer(k), as.double(A1), as.double(A2), as.integer(M0), as.double(P0), as.double(grid$A), as.double(grid$B), as.double(epsilon), as.character(output), as.character(path), as.integer(err_method))
-		dyn.unload(paste(path, mcCoil_prop_code_location, sep=""))
+		dyn.unload(mcCoil_prop_code_location)
 
 	} else { stop(paste("Sample size is too small (n=", n, ", k=", k,").", sep=""))}
 		
