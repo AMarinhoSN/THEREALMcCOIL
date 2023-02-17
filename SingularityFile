@@ -1,0 +1,39 @@
+Bootstrap: docker
+From:debian:9.8-slim
+
+%post
+export DEBIAN_FRONTEND=noninteractive
+apt update
+apt upgrade -y
+apt install git grep libcurl4-openssl-dev r-base -y
+
+# get TheRealMcCoil code
+mkdir /app/
+cd /app/
+git clone https://github.com/AMarinhoSN/THEREALMcCOIL.git
+cd THEREALMcCOIL/
+
+# compile cartegorical method
+cd categorical_method/
+R CMD SHLIB McCOIL_categorical_code.c llfunction_het.c
+# update path on the testing script
+sed -i '1s/.*/path="\/app\/THEREALMcCOIL\/categorical_method"/' test_R_code.R
+
+# recompile proportional method
+cd ../proportional_method/
+R CMD SHLIB McCOIL_prop_code.c llfunction.c
+sed -i '1s/.*/path="\/app\/THEREALMcCOIL\/proportional_method"/' test_R_code.R
+
+# if you want to use TheRealMcCoil inside the container
+# on an Rscript, just provide your script the path to
+# the REAL McCOIL and source the .R, such as:
+# '''
+# path <- "/app/McCOIL/categorical_method/")
+# source(paste(path, "McCOIL_categorical.R", sep=""))
+# '''
+
+%runscript
+exec /bin/bash "$@"
+
+%startscript
+exec /bin/bash "$@"
