@@ -1,8 +1,9 @@
-McCOIL_categorical = function(data, maxCOI=25, threshold_ind=20, threshold_site=20, totalrun=10000, burnin=1000, M0=15, e1=0.05, e2=0.05, err_method=1, path=getwd(), output="output.txt" ){
+library(here)
+McCOIL_categorical = function(data, maxCOI=25, threshold_ind=20, threshold_site=20, totalrun=10000, burnin=1000, M0=15, e1=0.05, e2=0.05, err_method=1, path=getwd(), output="output.txt", src_path=here() ){
 
-	mcCoil_categorical_code_location = '/McCOIL_categorical_code.so'
+	mcCoil_categorical_code_location = paste(src_path,"/McCOIL_categorical_code.so", sep="")
 	if(Sys.info()['sysname'] == 'Windows') {
-		mcCoil_categorical_code_location = '/McCOIL_categorical_code.dll'
+		mcCoil_categorical_code_location = paste(src_path,"/McCOIL_categorical_code.dll",sep="")
 	}
 
 	In_ind= rep(NA, nrow(data))
@@ -39,9 +40,9 @@ McCOIL_categorical = function(data, maxCOI=25, threshold_ind=20, threshold_site=
 	M0=rep(M0, n)
 
 	if ((n>10 & k>10)){	
-		dyn.load(paste(path, mcCoil_categorical_code_location, sep=""))
+		dyn.load(mcCoil_categorical_code_location)
 		K <- .C("McCOIL_categorical", as.integer(maxCOI), as.integer(totalrun), as.integer(n), as.integer(k), as.double(simpleS2_vec), as.integer(M0), as.double(P0), as.double(e1), as.double(e2), as.character(output), as.character(path), as.integer(err_method))
-		dyn.unload(paste(path, mcCoil_categorical_code_location, sep=""))
+		dyn.unload(mcCoil_categorical_code_location)
 	} else { stop(paste("Sample size is too small (n=", n, ", k=", k,").", sep=""))}
 
 	##summarize results
