@@ -1,8 +1,8 @@
 McCOIL_proportional = function(dataA1, dataA2, maxCOI=25, totalrun=10000, burnin=1000, M0=15, epsilon=0.02, err_method=1, path=getwd(), output="output.txt", src_path=""){
 	
-	mcCoil_prop_code_location = paste(src_path,'/McCOIL_prop_code.so',sep="")
+	mcCoil_prop_code_location = paste(src_path,'categorical_method/McCOIL_prop_code.so',sep="/")
 	if(Sys.info()['sysname'] == 'Windows'){
-		mcCoil_prop_code_location = paste(src_path,'/McCOIL_prop_code.dll',sep="")
+		mcCoil_prop_code_location = paste(src_path,'categorical_method/McCOIL_prop_code.dll',sep="/")
 	}
 
 	grid = read.table(paste(path, "/fitted_beta_grid_25.txt", sep=""), head=T)
