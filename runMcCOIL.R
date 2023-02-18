@@ -45,6 +45,14 @@ option_list <- list(
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
+
+# check if required was provided
+if (is.null(opt$infile)){
+  print_help(opt_parser)
+  stop("At least one argument must be supplied (input file).n", call.=FALSE)
+}
+
+
 print(" ---| THERealMcCOIL.R |---")
 print(" PARAMETERS: ")
 print("  -- paths --")
@@ -62,12 +70,6 @@ print(paste("  e1          :", opt$e1))
 print(paste("  e2          :", opt$e2))
 print(paste("  estimate_e  :", opt$estimate_e))
 print(" -------------------------")
-
-# check if required was provided
-if (is.null(opt$infile)){
-  print_help(opt_parser)
-  stop("At least one argument must be supplied (input file).n", call.=FALSE)
-}
 
 # set err_method
 # if estimate e values, then set err_metho to 3
