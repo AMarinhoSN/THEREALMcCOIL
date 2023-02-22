@@ -39,17 +39,26 @@ option_list <- list(
             metavar="character"),
     make_option("--outPrefix", type="character", default="COIout",
             help="Prefix for output files [default='COIout']",
-            metavar="character")
+            metavar="character"),
+    make_option("--seed", default=NULL,
+            help="set seed for random number generator [default= NULL]")
 );
+
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
+# TODO implement arguments sanity checks
 
 # check if required was provided
 if (is.null(opt$infile)){
   print_help(opt_parser)
   stop("At least one argument must be supplied (input file).n", call.=FALSE)
+}
+
+if (is.null(opt$seed) == FALSE){
+  # set random number seed
+  set.seed(opt$seed)
 }
 
 
@@ -69,6 +78,7 @@ print(paste("  M0          :", opt$M0))
 print(paste("  e1          :", opt$e1))
 print(paste("  e2          :", opt$e2))
 print(paste("  estimate_e  :", opt$estimate_e))
+print(paste("  seed        :", opt$seed))
 print(" -------------------------")
 
 # set err_method
