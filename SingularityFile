@@ -29,10 +29,6 @@ cd ../proportional_method/
 R CMD SHLIB McCOIL_prop_code.c llfunction.c
 sed -i '1s/.*/path="\/app\/THEREALMcCOIL\/proportional_method"/' test_R_code.R
 
-# if you want to use an Rscript which use TheRealMcCoil inside the container
-# just provide on your script the path to the real mccoil asL
-# path <- paste(getwd() , "/R/McCOIL/categorical_method", sep="") ##enter your path here
-# but
 %runscript
 exec /bin/bash "$@"
 
